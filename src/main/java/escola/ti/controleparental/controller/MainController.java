@@ -1,6 +1,7 @@
 package escola.ti.controleparental.controller;
 
 import escola.ti.controleparental.model.UserModel;
+import escola.ti.controleparental.model.dto.DeleteUserDTO;
 import escola.ti.controleparental.model.dto.EmailUserDTO;
 import escola.ti.controleparental.model.dto.TelUserDTO;
 import escola.ti.controleparental.model.dto.UpdateUserEmailDTO;
@@ -24,6 +25,39 @@ public class MainController {
         return password.getPassword();
     }
 
+    // TELEFONE
+
+    // CREATE
+    @PostMapping(path="/addT") // Define o caminho onde vai ser feito a requesição (no caso localhost:8080/addT)
+    public ResponseEntity<TelUserDTO> addNewUserT(@RequestBody TelUserDTO body){ 
+        UserModel u = new UserModel(); // Cria um objeto do tipo UserModel, o user model é uma modelo de como é no banco, para não ter problema de tipos
+        u.setTelefone(body.getTelefone()); // Se define o que for nescessario no objeto que foi iniciada a cima
+        // ...
+        userRepository.save(u); // salva o objeto modelo no banco
+
+        return new ResponseEntity<TelUserDTO>(body, null, 200); // O retorno ao usuario, trazendo de volta o que foi enviado e o protocolo HTTP em JSON
+
+        /*  É feito um caminho em um Post
+            inicio > pathing(PostMapping) > RequestBody(o que vai ser enviado pelo usuario) > ResponseEntity (o que o back vai trazer de resposta ao usuario)
+
+            O usuario envia uma informação no path definido, essa informação é armazenada no RequestBody, essa informação é utilizada pela função e salva/atualizada/deletada
+            no banco utilizando o repository, e uma resposta é enviada de volta ao usuario/front (objeto, headers, protocoloHTTP)
+         */
+    }
+
+    // UPDATE
+    @PostMapping(path="/updateT")
+    public ResponseEntity<UpdateUserTelDTO> updateUserTel(@RequestBody UpdateUserTelDTO body){
+        UserModel u = userRepository.findById(body.getId()).get();// Salva as informações do banco no objeto (id/email/telefone)
+        u.setTelefone(body.getTelefone()); // Modifica o valor do objeto
+
+        userRepository.save(u); // Salva de volta no banco, ja que no objeto ja tem o id ele atualiza aquele id no banco, assim sendo o mesmo comando de criação
+
+        return new ResponseEntity<UpdateUserTelDTO>(body, null, 200);
+    }
+
+    // EMAIL
+
     @PostMapping(path="/addE")
     public ResponseEntity<EmailUserDTO> addNewUserE(@RequestBody EmailUserDTO body){
         UserModel u = new UserModel();
@@ -33,33 +67,23 @@ public class MainController {
         return new ResponseEntity<EmailUserDTO>(body, null, 200);
     }
 
-    @PostMapping(path="/addT")
-    public ResponseEntity<TelUserDTO> addNewUserT(@RequestBody TelUserDTO body){
-        UserModel u = new UserModel();
-        u.setTelefone(body.getTelefone());
-        userRepository.save(u);
-
-        return new ResponseEntity<TelUserDTO>(body, null, 200);
-    }
-
-    @PostMapping(path="/updateT")
-    public ResponseEntity<UpdateUserTelDTO> updateUserTel(@RequestBody UpdateUserTelDTO body){
-        UserModel u = userRepository.findById(body.getId()).get();
-        u.setTelefone(body.getTelefone());
-
-        userRepository.save(u);
-
-        return new ResponseEntity<UpdateUserTelDTO>(body, null, 200);
-    }
-
     @PostMapping(path="/updateE")
     public ResponseEntity<UpdateUserEmailDTO> updateUserEmail(@RequestBody UpdateUserEmailDTO body){
         UserModel u = userRepository.findById(body.getId()).get();
-        u.setEmail(body.getEmail());
+        u.setEmail(body.getEmail()); 
 
         userRepository.save(u);
 
         return new ResponseEntity<UpdateUserEmailDTO>(body, null, 200);
+    }
+
+    // DELETE
+
+    @PostMapping(path="/deleteU")
+    public ResponseEntity<DeleteUserDTO> deleteUser(@RequestBody DeleteUserDTO body){
+        userRepository.deleteById(body.getId()); // Comando de delete do repository, o usuario informa o ID e ja podemos excluir do banco.
+
+        return new ResponseEntity<DeleteUserDTO>(body, null, 200); // Retorno de confirmação.
     }
 
     @GetMapping(path="user")
