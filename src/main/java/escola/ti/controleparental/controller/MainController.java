@@ -8,6 +8,7 @@ import escola.ti.controleparental.model.dto.UpdateUserEmailDTO;
 import escola.ti.controleparental.model.dto.UpdateUserTelDTO;
 import escola.ti.controleparental.model.util.Password;
 import escola.ti.controleparental.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,11 @@ public class MainController {
     // CREATE
     @PostMapping(path="/addT") // Define o caminho onde vai ser feito a requesição (no caso localhost:8080/addT)
     public ResponseEntity<TelUserDTO> addNewUserT(@RequestBody TelUserDTO body){ 
+        body.getDataNascimento().setDate(body.getDataNascimento().getDate()+1); // Tive que fazer isso pois estava sempre definindo um dia antes
+
         UserModel u = new UserModel(); // Cria um objeto do tipo UserModel, o user model é uma modelo de como é no banco, para não ter problema de tipos
         u.setTelefone(body.getTelefone()); // Se define o que for nescessario no objeto que foi iniciada a cima
+        u.setDataNascimento(body.getDataNascimento());
         // ...
         userRepository.save(u); // salva o objeto modelo no banco
 
@@ -46,6 +50,7 @@ public class MainController {
     }
 
     // UPDATE
+
     @PostMapping(path="/updateT")
     public ResponseEntity<UpdateUserTelDTO> updateUserTel(@RequestBody UpdateUserTelDTO body){
         UserModel u = userRepository.findById(body.getId()).get();// Salva as informações do banco no objeto (id/email/telefone)
@@ -60,8 +65,12 @@ public class MainController {
 
     @PostMapping(path="/addE")
     public ResponseEntity<EmailUserDTO> addNewUserE(@RequestBody EmailUserDTO body){
+        body.getDataNascimento().setDate(body.getDataNascimento().getDate()+1);
+
         UserModel u = new UserModel();
         u.setEmail(body.getEmail());
+        u.setDataNascimento(body.getDataNascimento());
+
         userRepository.save(u);
 
         return new ResponseEntity<EmailUserDTO>(body, null, 200);

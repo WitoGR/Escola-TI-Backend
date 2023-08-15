@@ -1,5 +1,7 @@
 package escola.ti.controleparental.model;
 
+import java.sql.Date;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,4 +32,10 @@ public class UserModel {
     @Getter
     @Setter
     private String telefone;
+
+    @Column(name="dataNascimento")
+    @Basic(optional = false)
+    @Getter
+    @Setter
+    private Date dataNascimento;
 }
