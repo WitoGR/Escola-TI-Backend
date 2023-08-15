@@ -6,11 +6,17 @@ import escola.ti.controleparental.model.dto.EmailUserDTO;
 import escola.ti.controleparental.model.dto.TelUserDTO;
 import escola.ti.controleparental.model.dto.UpdateUserEmailDTO;
 import escola.ti.controleparental.model.dto.UpdateUserTelDTO;
+import escola.ti.controleparental.model.util.EmailService;
 import escola.ti.controleparental.model.util.Password;
 import escola.ti.controleparental.repository.UserRepository;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -95,8 +101,18 @@ public class MainController {
         return new ResponseEntity<DeleteUserDTO>(body, null, 200); // Retorno de confirmação.
     }
 
-    @GetMapping(path="user")
+    @GetMapping(path="/user")
     public @ResponseBody Iterable<UserModel> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    // EMAIL
+    
+    @PostMapping(path="/email")
+    public @ResponseBody void sendHtmlEmail(@RequestParam String email) throws MessagingException{
+        EmailService e = new EmailService();
+        Password p = new Password();
+
+        e.sendEmail(email, "Senha", p.getPassword());
     }
 }
