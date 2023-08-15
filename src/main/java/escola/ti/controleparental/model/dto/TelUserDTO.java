@@ -7,6 +7,6 @@ import lombok.Setter;
 
 @Getter@Setter
 public class TelUserDTO {
-    private String Telefone;
+    private String telefone;
     private Date dataNascimento;
 }
