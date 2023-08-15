@@ -6,7 +6,6 @@ import escola.ti.controleparental.model.dto.EmailUserDTO;
 import escola.ti.controleparental.model.dto.TelUserDTO;
 import escola.ti.controleparental.model.dto.UpdateUserEmailDTO;
 import escola.ti.controleparental.model.dto.UpdateUserTelDTO;
-import escola.ti.controleparental.model.util.EmailService;
 import escola.ti.controleparental.model.util.Password;
 import escola.ti.controleparental.repository.UserRepository;
 
@@ -108,11 +107,5 @@ public class MainController {
 
     // EMAIL
     
-    @PostMapping(path="/email")
-    public @ResponseBody void sendHtmlEmail(@RequestParam String email) throws MessagingException{
-        EmailService e = new EmailService();
-        Password p = new Password();
 
-        e.sendEmail(email, "Senha", p.getPassword());
-    }
 }
