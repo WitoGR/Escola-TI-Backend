@@ -9,13 +9,8 @@ import escola.ti.controleparental.model.dto.UpdateUserTelDTO;
 import escola.ti.controleparental.model.util.Password;
 import escola.ti.controleparental.repository.UserRepository;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -104,8 +99,5 @@ public class MainController {
     public @ResponseBody Iterable<UserModel> getAllUsers(){
         return userRepository.findAll();
     }
-
-    // EMAIL
-    
 
 }
