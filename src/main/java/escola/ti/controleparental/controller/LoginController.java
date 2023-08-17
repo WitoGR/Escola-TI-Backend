@@ -31,7 +31,7 @@ public class LoginController {
 
     UserLogin userLogin = new UserLogin();
 
-    @GetMapping(path="/")
+    @GetMapping(path="/teste")
     public String teste(){  
         return "funcionando";
     }
@@ -43,7 +43,7 @@ public class LoginController {
         Password password = new Password();
         this.userLogin.setSenha(password.getPassword());
 
-        String resposta = emailSenderService.sendEmail(body,"Your Password:\n  "+password.getPassword(),"Senha Gerada automaticamente");
+        String resposta = emailSenderService.sendSimpleEmail(body,"Your Password:\n  "+password.getPassword(),"Senha Gerada automaticamente");
 
         return resposta;
     }
