@@ -4,6 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-public class DeleteUserDTO {
-    private String login;
+public class UserLoginInfoDTO {
+    private Integer idUser;
 }

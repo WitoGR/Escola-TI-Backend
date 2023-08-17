@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-public class DeleteUserDTO {
-    private String login;
+public class HistoricoEnvioDTO {
+    private String url;
+    private String horario;
 }

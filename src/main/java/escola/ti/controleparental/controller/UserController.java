@@ -6,7 +6,6 @@ import escola.ti.controleparental.model.dto.EmailUserDTO;
 import escola.ti.controleparental.model.dto.TelUserDTO;
 import escola.ti.controleparental.model.dto.UpdateUserEmailDTO;
 import escola.ti.controleparental.model.dto.UpdateUserTelDTO;
-import escola.ti.controleparental.model.util.Password;
 import escola.ti.controleparental.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
-public class MainController {
+public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping(path="/testeSenha")
-    public String testeSenha(){
-        Password password = new Password();
-        return password.getPassword();
-    }
-
-    // TELEFONE
+    // TELEFONE ------------------------------------------------------------------
 
     // CREATE
     @PostMapping(path="/addT") // Define o caminho onde vai ser feito a requesição (no caso localhost:8080/addT)
@@ -61,7 +54,7 @@ public class MainController {
         return new ResponseEntity<UpdateUserTelDTO>(body, null, 200);
     }
 
-    // EMAIL
+    // EMAIL ------------------------------------------------------------------
 
     @PostMapping(path="/addE")
     public ResponseEntity<EmailUserDTO> addNewUserE(@RequestBody EmailUserDTO body){
@@ -86,11 +79,16 @@ public class MainController {
         return new ResponseEntity<UpdateUserEmailDTO>(body, null, 200);
     }
 
-    // DELETE
+    // DELETE  Tanto telefone quanto email
 
     @PostMapping(path="/deleteU")
     public ResponseEntity<DeleteUserDTO> deleteUser(@RequestBody DeleteUserDTO body){
-        userRepository.deleteById(body.getId()); // Comando de delete do repository, o usuario informa o ID e ja podemos excluir do banco.
+
+        for(UserModel u : userRepository.findAll()){
+            if(body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())){ // procura login no banco
+                userRepository.deleteById(u.getIdUser());// Comando de delete do repository, o usuario informa o ID e ja podemos excluir do banco.
+            }
+        }
 
         return new ResponseEntity<DeleteUserDTO>(body, null, 200); // Retorno de confirmação.
     }
