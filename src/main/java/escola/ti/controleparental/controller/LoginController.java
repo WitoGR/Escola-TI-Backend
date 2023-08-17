@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path="/login")
 public class LoginController {  
+    
     @Autowired
     EmailSenderService emailSenderService;
 
@@ -30,11 +31,6 @@ public class LoginController {
     private UserRepository userRepository;
 
     UserLogin userLogin = new UserLogin();
-
-    @GetMapping(path="/teste")
-    public String teste(){  
-        return "funcionando";
-    }
 
     // EMAIL --------------------------------------------
 
@@ -78,21 +74,21 @@ public class LoginController {
 
     @PostMapping(path="/attempt")
     public String loginUsusario(@RequestBody LoginDTO body){
-        String response = "Error";
+        String response = "Error"; // Naturalmente nunca deve trazer essa resposta
 
         if(attempt < 3){
-            attempt++;
+            attempt++; // Aumenta o numero de tentativas
 
-            for(UserModel u : userRepository.findAll()){
-                if((body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())) && body.getSenha().equals(this.userLogin.getSenha())){
-                    this.userLogin.setSenha(null);
-                    response =  "Access Granted";
+            for(UserModel u : userRepository.findAll()){ 
+                if((body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())) && body.getSenha().equals(this.userLogin.getSenha())){ // Valida o login e a senha enviada pro login
+                    this.userLogin.setSenha(null); // Reseta a senha para nao deixar armazenada
+                    response =  "Access Granted"; // Resposta de validação
                 }
-                else response = "Access Denied";
+                else response = "Access Denied"; // Resposta de acesso negado
             }    
         }
-        else response = "Too many failed attempts";
+        else response = "Too many failed attempts"; // Resposta de 3 tentativas consecutivas erradas (Adicionar envio de email com muitas tentativas erradas)
         
-        return response;
+        return response;// retorna a resposta
     }
 }
