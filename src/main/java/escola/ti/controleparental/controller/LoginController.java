@@ -40,11 +40,20 @@ public class LoginController {
 
     @PostMapping(path="/sendEmail")
     public String sendEmail(@RequestBody EmailDTO body){
-        Password password = new Password();
-        this.userLogin.setSenha(password.getPassword());
+        String resposta = "";
 
-        String resposta = emailSenderService.sendSimpleEmail(body,"Your Password:\n  "+password.getPassword(),"Senha Gerada automaticamente");
+        for(UserModel u : userRepository.findAll()){ // Adere um usuario no banco em uma variavel
+            if(body.getRecepient().equals(u.getEmail())){ // Verifica se o email dado existe no banco
+                Password password = new Password(); // Gera uma senha aleatoria
+                this.userLogin.setSenha(password.getPassword()); // Salva senha na memoria
 
+                resposta = emailSenderService.sendSimpleEmail(body,"Your Password:\n  "+password.getPassword(),"Senha Gerada automaticamente"); // Envia o email
+                
+                return resposta;// Retorna o que foi gerado
+            }
+            else
+                resposta = "Email não registrado";
+        }
         return resposta;
     }
 
@@ -65,14 +74,23 @@ public class LoginController {
     }
     */
 
+    int attempt = 0;
+
     @PostMapping(path="/attempt")
     public String loginUsusario(@RequestBody LoginDTO body){
-        for(UserModel u : userRepository.findAll()){
-            if((body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())) && body.getSenha().equals(this.userLogin.getSenha())){
-                this.userLogin.setSenha(null);
-                return "Access Granted";
-            }
+
+        if(attempt < 3){
+            attempt++;
+
+            for(UserModel u : userRepository.findAll()){
+                if((body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())) && body.getSenha().equals(this.userLogin.getSenha())){
+                    this.userLogin.setSenha(null);
+                    return "Access Granted";
+                }
+                else return "Access Denied";
+            }    
         }
-        return "Access Denied";
+        
+        return "Too many failed attempts";
     }
 }
