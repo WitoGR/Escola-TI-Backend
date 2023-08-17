@@ -78,6 +78,7 @@ public class LoginController {
 
     @PostMapping(path="/attempt")
     public String loginUsusario(@RequestBody LoginDTO body){
+        String response = "Error";
 
         if(attempt < 3){
             attempt++;
@@ -85,12 +86,13 @@ public class LoginController {
             for(UserModel u : userRepository.findAll()){
                 if((body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())) && body.getSenha().equals(this.userLogin.getSenha())){
                     this.userLogin.setSenha(null);
-                    return "Access Granted";
+                    response =  "Access Granted";
                 }
-                else return "Access Denied";
+                else response = "Access Denied";
             }    
         }
+        else response = "Too many failed attempts";
         
-        return "Too many failed attempts";
+        return response;
     }
 }
