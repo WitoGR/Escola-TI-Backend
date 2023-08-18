@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter@Setter
-public class BloqueioRespostaDTO {
+public class BloqueioDeleteDTO {
     private Integer idBloqueio;
-    private String url;
-    private String horarioInicio;
-    private String horarioFim;
 }
