@@ -27,7 +27,7 @@ public class BloqueioController {
     private BloqueioRepository bloqueioRepository;
 
     @GetMapping(path="/all")
-    public List<BloqueioRespostaDTO> addBloqueio(@RequestBody UserLoginInfoDTO body){
+    public List<BloqueioRespostaDTO> allBloqueio(@RequestBody UserLoginInfoDTO body){
         List<BloqueioRespostaDTO> resposta = new ArrayList<BloqueioRespostaDTO>();
         BloqueioRespostaDTO item = new BloqueioRespostaDTO();
         

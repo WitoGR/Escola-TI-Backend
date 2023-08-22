@@ -40,7 +40,7 @@ public class HistoricoController {
     }
 
     @PostMapping(path="/save")
-    public String postMethodName(@RequestBody HistoricoPostDTO body) {
+    public String saveUserHistorico(@RequestBody HistoricoPostDTO body) {
         HistoricoModel historicoModel = new HistoricoModel();
 
         historicoModel.setHorarioDeAcesso(body.getHorario());
