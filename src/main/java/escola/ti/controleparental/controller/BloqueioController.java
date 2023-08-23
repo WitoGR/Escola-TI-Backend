@@ -2,7 +2,6 @@ package escola.ti.controleparental.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import escola.ti.controleparental.model.BloqueioModel;
-import escola.ti.controleparental.model.HistoricoModel;
 import escola.ti.controleparental.model.dto.BloqueioDTO;
 import escola.ti.controleparental.model.dto.BloqueioDeleteDTO;
 import escola.ti.controleparental.model.dto.BloqueioRespostaDTO;

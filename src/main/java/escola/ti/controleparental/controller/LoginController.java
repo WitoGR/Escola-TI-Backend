@@ -8,6 +8,7 @@ import escola.ti.controleparental.model.util.EmailSenderService;
 import escola.ti.controleparental.model.util.Password;
 import escola.ti.controleparental.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,13 @@ public class LoginController {
     private UserRepository userRepository;
 
     UserLogin userLogin = new UserLogin();
+
+    @GetMapping(path="/testeSenha")
+    public String testeSenha(){ // gera uma senha e salva no local, para nao ter que esperar o envio da senha por email/telefone;
+        Password p = new Password();
+        userLogin.setSenha(p.getPassword());
+        return userLogin.getSenha();
+    }
 
     // EMAIL --------------------------------------------
 
@@ -81,7 +89,7 @@ public class LoginController {
             for(UserModel u : userRepository.findAll()){ 
                 if((body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())) && body.getSenha().equals(this.userLogin.getSenha())){ // Valida o login e a senha enviada pro login
                     this.userLogin.setSenha(null); // Reseta a senha para nao deixar armazenada
-                    response =  "Access Granted"; // Resposta de validação
+                    return response =  "Access Granted"; // Resposta de validação
                 }
                 else response = "Access Denied"; // Resposta de acesso negado
             }    

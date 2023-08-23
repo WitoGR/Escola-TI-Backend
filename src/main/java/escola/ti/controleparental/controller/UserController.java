@@ -24,7 +24,7 @@ public class UserController {
     // CREATE
     @PostMapping(path="/addT") // Define o caminho onde vai ser feito a requesição (no caso localhost:8080/addT)
     public ResponseEntity<TelUserDTO> addNewUserT(@RequestBody TelUserDTO body){ 
-        body.getDataNascimento().setDate(body.getDataNascimento().getDate()+1); // Tive que fazer isso pois estava sempre definindo um dia antes
+        //body.getDataNascimento().setDate(body.getDataNascimento().getDate()+1); // Tive que fazer isso pois estava sempre definindo um dia antes
 
         UserModel u = new UserModel(); // Cria um objeto do tipo UserModel, o user model é uma modelo de como é no banco, para não ter problema de tipos
         u.setTelefone(body.getTelefone()); // Se define o que for nescessario no objeto que foi iniciada a cima
@@ -58,7 +58,7 @@ public class UserController {
 
     @PostMapping(path="/addE")
     public ResponseEntity<EmailUserDTO> addNewUserE(@RequestBody EmailUserDTO body){
-        body.getDataNascimento().setDate(body.getDataNascimento().getDate()+1);
+        //body.getDataNascimento().setDate(body.getDataNascimento().getDate()+1);
 
         UserModel u = new UserModel();
         u.setEmail(body.getEmail());
