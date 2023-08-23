@@ -1,5 +1,8 @@
 package escola.ti.controleparental.model;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
@@ -41,4 +44,12 @@ public class HistoricoModel {
     @Getter
     @Setter
     private Timestamp horarioDeAcesso;
+
+    public String encodeURL(String value){
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
+    public String decodeURL(String value){
+        return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    }
 }
