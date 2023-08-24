@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import escola.ti.controleparental.model.HistoricoModel;
@@ -27,7 +27,7 @@ public class HistoricoController {
     private HistoricoRepository historicoRepository;
 
     @GetMapping(path="/all")
-    public List<HistoricoEnvioDTO> getUserHistorico(@RequestBody UserLoginInfoDTO body ){
+    public ResponseEntity<List<HistoricoEnvioDTO>> getUserHistorico(@RequestBody UserLoginInfoDTO body ){
         HistoricoEnvioDTO resposta = new HistoricoEnvioDTO();
         List<HistoricoEnvioDTO> lista = new ArrayList<HistoricoEnvioDTO>();
 
@@ -37,12 +37,11 @@ public class HistoricoController {
                 resposta.setUrl(h.decodeURL(h.getUrl()));
                 lista.add(resposta);
             }
-
-        return lista;
+        return new ResponseEntity<List<HistoricoEnvioDTO>>(lista, null, 200);
     }
 
     @PostMapping(path="/save")
-    public String saveUserHistorico(@RequestBody HistoricoPostDTO body) {
+    public ResponseEntity<String> saveUserHistorico(@RequestBody HistoricoPostDTO body) {
         HistoricoModel historicoModel = new HistoricoModel();
 
         historicoModel.setHorarioDeAcesso(body.getHorario());
@@ -51,7 +50,7 @@ public class HistoricoController {
 
         historicoRepository.save(historicoModel);
         
-        return "Historico Salvo";
+        return new ResponseEntity<String>("Historico Salvo", null, 200);
     }
     
 

@@ -79,7 +79,7 @@ public class UserController {
         return new ResponseEntity<UpdateUserEmailDTO>(body, null, 200);
     }
 
-    // DELETE  Tanto telefone quanto email
+    // DELETE USER funciona tanto com telefone quanto email
 
     @PostMapping(path="/deleteU")
     public ResponseEntity<DeleteUserDTO> deleteUser(@RequestBody DeleteUserDTO body){

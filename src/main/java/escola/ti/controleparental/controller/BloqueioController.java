@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,14 +26,14 @@ public class BloqueioController {
     private BloqueioRepository bloqueioRepository;
 
     @GetMapping(path="/all")
-    public List<BloqueioRespostaDTO> allBloqueio(@RequestBody UserLoginInfoDTO body){
+    public ResponseEntity<List<BloqueioRespostaDTO>> allBloqueio(@RequestBody UserLoginInfoDTO body){
         List<BloqueioRespostaDTO> resposta = new ArrayList<BloqueioRespostaDTO>();
         BloqueioRespostaDTO item = new BloqueioRespostaDTO();
         
         for(BloqueioModel b: bloqueioRepository.findAll()){
             if(body.getIdUser() == b.getIdUser()){
                 item.setIdBloqueio(b.getIdBloqueio());
-                item.setUrl(b.getUrl());
+                item.setUrl(b.decodeURL(b.getUrl()));
                 item.setHorarioInicio(""+b.getHorarioInicio());
                 item.setHorarioFim(""+b.getHorarioFim());
 
@@ -40,28 +41,28 @@ public class BloqueioController {
             }
         }
 
-        return resposta;
+        return new ResponseEntity<List<BloqueioRespostaDTO>>(resposta, null, 200);
     }
 
     @PostMapping(path="/add")
-    public String addBloqueio(@RequestBody BloqueioDTO body){
+    public ResponseEntity<String> addBloqueio(@RequestBody BloqueioDTO body){
         BloqueioModel bloqueioModel = new BloqueioModel();
 
         bloqueioModel.setIdUser(body.getIdUser());
-        bloqueioModel.setUrl(body.getUrl());
+        bloqueioModel.setUrl(bloqueioModel.encodeURL(body.getUrl()));
         bloqueioModel.setHorarioInicio(body.getTempoInicio());
         bloqueioModel.setHorarioFim(body.getTempoFim());
 
         bloqueioRepository.save(bloqueioModel);
 
-        return "Bloqueio salvo";
+        return new ResponseEntity<String>("Bloqueio salvo", null, 200);
     }
 
     @PostMapping(path="/delete")
-    public String deleteBloqueio(@RequestBody BloqueioDeleteDTO body){
+    public ResponseEntity<String> deleteBloqueio(@RequestBody BloqueioDeleteDTO body){
         bloqueioRepository.deleteById(body.getIdBloqueio());
 
-        return "Url desbloqueada";
+        return new ResponseEntity<String>("URL Desbloqueada", null, 200);
     }
 
 }

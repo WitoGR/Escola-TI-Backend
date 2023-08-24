@@ -1,5 +1,8 @@
 package escola.ti.controleparental.model;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Time;
 
 import jakarta.persistence.Column;
@@ -45,4 +48,12 @@ public class BloqueioModel {
     @Getter
     @Setter
     private Time horarioFim;
+
+    public String encodeURL(String value){
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
+    public String decodeURL(String value){
+        return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    }
 }

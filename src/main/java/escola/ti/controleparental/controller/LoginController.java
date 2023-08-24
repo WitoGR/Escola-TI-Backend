@@ -8,6 +8,7 @@ import escola.ti.controleparental.model.util.EmailSenderService;
 import escola.ti.controleparental.model.util.Password;
 import escola.ti.controleparental.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,17 +34,18 @@ public class LoginController {
     UserLogin userLogin = new UserLogin();
 
     @GetMapping(path="/testeSenha")
-    public String testeSenha(){ // gera uma senha e salva no local, para nao ter que esperar o envio da senha por email/telefone;
+    public ResponseEntity<String> testeSenha(){ // gera uma senha e salva no local, para nao ter que esperar o envio da senha por email/telefone;
         Password p = new Password();
         userLogin.setSenha(p.getPassword());
-        return userLogin.getSenha();
+        return new ResponseEntity<String>(userLogin.getSenha(), null, 200);
     }
 
     // EMAIL --------------------------------------------
 
     @PostMapping(path="/sendEmail")
-    public String sendEmail(@RequestBody EmailDTO body){
+    public ResponseEntity<String> sendEmail(@RequestBody EmailDTO body){
         String resposta = "";
+        Integer httpStatus = 403;
 
         for(UserModel u : userRepository.findAll()){ // Adere um usuario no banco em uma variavel
             if(body.getRecepient().equals(u.getEmail())){ // Verifica se o email dado existe no banco
@@ -52,12 +54,12 @@ public class LoginController {
 
                 resposta = emailSenderService.sendSimpleEmail(body,"Your Password:\n  "+password.getPassword(),"Senha Gerada automaticamente"); // Envia o email
                 
-                return resposta;// Retorna o que foi gerado
+                return new ResponseEntity<String>(resposta, null, httpStatus=200);// Retorna o que foi gerado
             }
             else
                 resposta = "Email não registrado";
         }
-        return resposta;
+        return new ResponseEntity<String>(resposta, null, httpStatus);
     }
 
     // SMS ----------------------------------------------
@@ -80,8 +82,9 @@ public class LoginController {
     int attempt = 0;
 
     @PostMapping(path="/attempt")
-    public String loginUsusario(@RequestBody LoginDTO body){
+    public ResponseEntity<String> loginUsusario(@RequestBody LoginDTO body){
         String response = "Error"; // Naturalmente nunca deve trazer essa resposta
+        Integer httpStatus = 403;
 
         if(attempt < 3){
             attempt++; // Aumenta o numero de tentativas
@@ -89,13 +92,16 @@ public class LoginController {
             for(UserModel u : userRepository.findAll()){ 
                 if((body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())) && body.getSenha().equals(this.userLogin.getSenha())){ // Valida o login e a senha enviada pro login
                     this.userLogin.setSenha(null); // Reseta a senha para nao deixar armazenada
-                    return response =  "Access Granted"; // Resposta de validação
+                    return new ResponseEntity<String>("Sucesso!", null, httpStatus=200); // Resposta de validação
                 }
                 else response = "Access Denied"; // Resposta de acesso negado
             }    
         }
-        else response = "Too many failed attempts"; // Resposta de 3 tentativas consecutivas erradas (Adicionar envio de email com muitas tentativas erradas)
+        else{
+            response = "muitas tentativas falhas"; // Resposta de 3 tentativas consecutivas erradas (Adicionar envio de email com muitas tentativas erradas) 
+            httpStatus = 423;
+        } 
         
-        return response;// retorna a resposta
+        return new ResponseEntity<String>(response, null, httpStatus); // retorna a resposta
     }
 }
