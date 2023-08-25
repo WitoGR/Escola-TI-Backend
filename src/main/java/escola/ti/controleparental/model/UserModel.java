@@ -49,5 +49,5 @@ public class UserModel {
     @Basic(optional = false)
     @Getter
     @Setter
-    private Integer tipoRecebimentoNotificação;
+    private Integer tipoRecebimentoNotificacao;
 }
