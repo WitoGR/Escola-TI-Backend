@@ -29,7 +29,7 @@ public class UserController {
         UserModel u = new UserModel(); // Cria um objeto do tipo UserModel, o user model é uma modelo de como é no banco, para não ter problema de tipos
         u.setTelefone(body.getTelefone()); // Se define o que for nescessario no objeto que foi iniciada a cima
         u.setDataNascimento(body.getDataNascimento());
-        u.setTipoRecebimentoNotificação(0); // valor que vai de 0 a 3, 0 - SMS
+        u.setTipoRecebimentoNotificacao(0); // valor que vai de 0 a 3, 0 - SMS
         u.setTipoRecebimentoSenha(false); // se é false ele recebe por SMS
         // ...
         userRepository.save(u); // salva o objeto modelo no banco
@@ -65,7 +65,7 @@ public class UserController {
         UserModel u = new UserModel();
         u.setEmail(body.getEmail());
         u.setDataNascimento(body.getDataNascimento());
-        u.setTipoRecebimentoNotificação(1); // valor que vai de 0 a 3, 1 - Email
+        u.setTipoRecebimentoNotificacao(1); // valor que vai de 0 a 3, 1 - Email
         u.setTipoRecebimentoSenha(true); // se é true ele recebe por email
 
         userRepository.save(u);

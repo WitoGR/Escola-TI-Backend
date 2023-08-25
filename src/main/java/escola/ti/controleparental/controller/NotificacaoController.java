@@ -29,7 +29,7 @@ public class NotificacaoController {
         if(userRepository.findById(body.getIdUser()).isPresent()){
             Optional<UserModel> userModel = userRepository.findById(body.getIdUser());   
             
-            notificacaoUserDTO.setTipoRecebimentoNotificacao(userModel.get().getTipoRecebimentoNotificação());
+            notificacaoUserDTO.setTipoRecebimentoNotificacao(userModel.get().getTipoRecebimentoNotificacao());
             notificacaoUserDTO.setTipoRecebimentoSenha(userModel.get().getTipoRecebimentoSenha());
 
             switch(notificacaoUserDTO.getTipoRecebimentoNotificacao()){
@@ -67,7 +67,7 @@ public class NotificacaoController {
             Optional<UserModel> userModel = userRepository.findById(body.getIdUser());
 
             UserModel u = new UserModel(userModel.get().getIdUser(), userModel.get().getEmail(), userModel.get().getTelefone(),
-            userModel.get().getDataNascimento(), body.getTipoSenha(), userModel.get().getTipoRecebimentoNotificação());
+            userModel.get().getDataNascimento(), body.getTipoSenha(), userModel.get().getTipoRecebimentoNotificacao());
 
             userRepository.save(u);
 
