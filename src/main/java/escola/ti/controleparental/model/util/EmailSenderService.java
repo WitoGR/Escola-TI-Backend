@@ -1,10 +1,11 @@
 package escola.ti.controleparental.model.util;
 
-import escola.ti.controleparental.model.dto.EmailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+
+import escola.ti.controleparental.model.dto.user.EmailDTO;
 
 @Component
 public class EmailSenderService {

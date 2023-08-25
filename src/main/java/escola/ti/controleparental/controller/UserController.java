@@ -1,11 +1,11 @@
 package escola.ti.controleparental.controller;
 
 import escola.ti.controleparental.model.UserModel;
-import escola.ti.controleparental.model.dto.DeleteUserDTO;
-import escola.ti.controleparental.model.dto.EmailUserDTO;
-import escola.ti.controleparental.model.dto.TelUserDTO;
-import escola.ti.controleparental.model.dto.UpdateUserEmailDTO;
-import escola.ti.controleparental.model.dto.UpdateUserTelDTO;
+import escola.ti.controleparental.model.dto.user.DeleteUserDTO;
+import escola.ti.controleparental.model.dto.user.EmailUserDTO;
+import escola.ti.controleparental.model.dto.user.TelUserDTO;
+import escola.ti.controleparental.model.dto.user.UpdateUserEmailDTO;
+import escola.ti.controleparental.model.dto.user.UpdateUserTelDTO;
 import escola.ti.controleparental.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,8 @@ public class UserController {
         UserModel u = new UserModel(); // Cria um objeto do tipo UserModel, o user model é uma modelo de como é no banco, para não ter problema de tipos
         u.setTelefone(body.getTelefone()); // Se define o que for nescessario no objeto que foi iniciada a cima
         u.setDataNascimento(body.getDataNascimento());
+        u.setTipoRecebimentoNotificação(0); // valor que vai de 0 a 3, 0 - SMS
+        u.setTipoRecebimentoSenha(false); // se é false ele recebe por SMS
         // ...
         userRepository.save(u); // salva o objeto modelo no banco
 
@@ -63,6 +65,8 @@ public class UserController {
         UserModel u = new UserModel();
         u.setEmail(body.getEmail());
         u.setDataNascimento(body.getDataNascimento());
+        u.setTipoRecebimentoNotificação(1); // valor que vai de 0 a 3, 1 - Email
+        u.setTipoRecebimentoSenha(true); // se é true ele recebe por email
 
         userRepository.save(u);
 
@@ -72,6 +76,7 @@ public class UserController {
     @PostMapping(path="/updateE")
     public ResponseEntity<UpdateUserEmailDTO> updateUserEmail(@RequestBody UpdateUserEmailDTO body){
         UserModel u = userRepository.findById(body.getId()).get();
+
         u.setEmail(body.getEmail()); 
 
         userRepository.save(u);
@@ -83,12 +88,7 @@ public class UserController {
 
     @PostMapping(path="/deleteU")
     public ResponseEntity<DeleteUserDTO> deleteUser(@RequestBody DeleteUserDTO body){
-
-        for(UserModel u : userRepository.findAll()){
-            if(body.getLogin().equals(u.getEmail()) || body.getLogin().equals(u.getTelefone())){ // procura login no banco
-                userRepository.deleteById(u.getIdUser());// Comando de delete do repository, o usuario informa o ID e ja podemos excluir do banco.
-            }
-        }
+        userRepository.deleteById(body.getId());
 
         return new ResponseEntity<DeleteUserDTO>(body, null, 200); // Retorno de confirmação.
     }

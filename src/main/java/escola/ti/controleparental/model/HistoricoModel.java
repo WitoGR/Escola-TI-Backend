@@ -45,6 +45,11 @@ public class HistoricoModel {
     @Setter
     private Timestamp horarioDeAcesso;
 
+    @Column(name="site_bloqueado")
+    @Getter
+    @Setter
+    private Boolean siteBloqueado;
+
     public String encodeURL(String value){
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }

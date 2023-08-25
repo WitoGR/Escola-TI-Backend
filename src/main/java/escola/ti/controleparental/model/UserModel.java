@@ -33,9 +33,21 @@ public class UserModel {
     @Setter
     private String telefone;
 
-    @Column(name="dataNascimento")
+    @Column(name="data_nascimento")
     @Basic(optional = false)
     @Getter
     @Setter
     private Date dataNascimento;
+
+    @Column(name="tipo_recebimento_senha")
+    @Basic(optional = false)
+    @Getter
+    @Setter
+    private Boolean tipoRecebimentoSenha;
+
+    @Column(name="tipo_recebimento_notificacao")
+    @Basic(optional = false)
+    @Getter
+    @Setter
+    private Integer tipoRecebimentoNotificação;
 }

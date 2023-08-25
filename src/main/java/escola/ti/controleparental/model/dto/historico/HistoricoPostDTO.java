@@ -1,4 +1,4 @@
-package escola.ti.controleparental.model.dto;
+package escola.ti.controleparental.model.dto.historico;
 
 import java.sql.Timestamp;
 

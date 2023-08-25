@@ -1,9 +1,9 @@
 package escola.ti.controleparental.controller;
 
 import escola.ti.controleparental.model.UserModel;
-import escola.ti.controleparental.model.dto.EmailDTO;
-import escola.ti.controleparental.model.dto.LoginDTO;
-import escola.ti.controleparental.model.dto.UserLogin;
+import escola.ti.controleparental.model.dto.user.EmailDTO;
+import escola.ti.controleparental.model.dto.user.LoginDTO;
+import escola.ti.controleparental.model.dto.user.UserLogin;
 import escola.ti.controleparental.model.util.EmailSenderService;
 import escola.ti.controleparental.model.util.Password;
 import escola.ti.controleparental.repository.UserRepository;

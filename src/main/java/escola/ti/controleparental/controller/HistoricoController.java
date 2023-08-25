@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import escola.ti.controleparental.model.HistoricoModel;
-import escola.ti.controleparental.model.dto.HistoricoEnvioDTO;
-import escola.ti.controleparental.model.dto.HistoricoPostDTO;
-import escola.ti.controleparental.model.dto.UserLoginInfoDTO;
+import escola.ti.controleparental.model.dto.historico.HistoricoEnvioDTO;
+import escola.ti.controleparental.model.dto.historico.HistoricoPostDTO;
+import escola.ti.controleparental.model.dto.user.UserLoginInfoDTO;
 import escola.ti.controleparental.repository.HistoricoRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;

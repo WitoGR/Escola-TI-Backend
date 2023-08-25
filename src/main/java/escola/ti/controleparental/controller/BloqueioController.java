@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import escola.ti.controleparental.model.BloqueioModel;
-import escola.ti.controleparental.model.dto.BloqueioDTO;
-import escola.ti.controleparental.model.dto.BloqueioDeleteDTO;
-import escola.ti.controleparental.model.dto.BloqueioRespostaDTO;
-import escola.ti.controleparental.model.dto.UserLoginInfoDTO;
+import escola.ti.controleparental.model.dto.bloqueio.BloqueioDTO;
+import escola.ti.controleparental.model.dto.bloqueio.BloqueioDeleteDTO;
+import escola.ti.controleparental.model.dto.bloqueio.BloqueioRespostaDTO;
+import escola.ti.controleparental.model.dto.user.UserLoginInfoDTO;
 import escola.ti.controleparental.repository.BloqueioRepository;
 
 @RestController
