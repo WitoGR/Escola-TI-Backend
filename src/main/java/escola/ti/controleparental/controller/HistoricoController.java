@@ -28,15 +28,17 @@ public class HistoricoController {
 
     @GetMapping(path="/all")
     public ResponseEntity<List<HistoricoEnvioDTO>> getUserHistorico(@RequestBody UserLoginInfoDTO body ){
-        HistoricoEnvioDTO resposta = new HistoricoEnvioDTO();
         List<HistoricoEnvioDTO> lista = new ArrayList<HistoricoEnvioDTO>();
 
-        for(HistoricoModel h : historicoRepository.findAll())
-            if(h.getIdUser()==body.getIdUser()){
+        for(HistoricoModel h : historicoRepository.findAll()){
+            if(body.getIdUser().equals(h.getIdUser())){
+                HistoricoEnvioDTO resposta = new HistoricoEnvioDTO();
                 resposta.setHorario(""+h.getHorarioDeAcesso());
                 resposta.setUrl(h.decodeURL(h.getUrl()));
                 lista.add(resposta);
             }
+        }
+            
         return new ResponseEntity<List<HistoricoEnvioDTO>>(lista, null, 200);
     }
 
