@@ -23,18 +23,28 @@ public class UserController {
 
     // CREATE
     @PostMapping(path="/addT") // Define o caminho onde vai ser feito a requesição (no caso localhost:8080/addT)
-    public ResponseEntity<TelUserDTO> addNewUserT(@RequestBody TelUserDTO body){ 
+    public ResponseEntity<String> addNewUserT(@RequestBody TelUserDTO body){ 
         //body.getDataNascimento().setDate(body.getDataNascimento().getDate()+1); // Tive que fazer isso pois estava sempre definindo um dia antes
+        boolean existe = false;
 
-        UserModel u = new UserModel(); // Cria um objeto do tipo UserModel, o user model é uma modelo de como é no banco, para não ter problema de tipos
-        u.setTelefone(body.getTelefone()); // Se define o que for nescessario no objeto que foi iniciada a cima
-        u.setDataNascimento(body.getDataNascimento());
-        u.setTipoRecebimentoNotificacao(0); // valor que vai de 0 a 3, 0 - SMS
-        u.setTipoRecebimentoSenha(false); // se é false ele recebe por SMS
-        // ...
-        userRepository.save(u); // salva o objeto modelo no banco
+        for(UserModel u : userRepository.findAll())
+            existe = body.getTelefone().equals(u.getTelefone()) ? true : false; // Verifica se ja existe no banco
 
-        return new ResponseEntity<TelUserDTO>(body, null, 200); // O retorno ao usuario, trazendo de volta o que foi enviado e o protocolo HTTP em JSON
+
+        if(!existe){
+            UserModel u = new UserModel(); // Cria um objeto do tipo UserModel, o user model é uma modelo de como é no banco, para não ter problema de tipos
+            
+            u.setTelefone(body.getTelefone()); // Se define o que for nescessario no objeto que foi iniciada a cima
+            u.setDataNascimento(body.getDataNascimento());
+            u.setTipoRecebimentoNotificacao(0); // valor que vai de 0 a 3, 0 - SMS
+            u.setTipoRecebimentoSenha(false); // se é false ele recebe por SMS
+            // ...
+
+            userRepository.save(u); // salva o objeto modelo no banco    
+
+            return new ResponseEntity<String>("Criado com sucesso...", null, 200); // O retorno ao usuario, trazendo de volta o que foi enviado e o protocolo HTTP em JSON
+        }
+        else return new ResponseEntity<String>("Telefone ja registrado...", null, 409);
 
         /*  É feito um caminho em um Post
             inicio > pathing(PostMapping) > RequestBody(o que vai ser enviado pelo usuario) > ResponseEntity (o que o back vai trazer de resposta ao usuario)
@@ -47,41 +57,67 @@ public class UserController {
     // UPDATE
 
     @PostMapping(path="/updateT")
-    public ResponseEntity<UpdateUserTelDTO> updateUserTel(@RequestBody UpdateUserTelDTO body){
-        UserModel u = userRepository.findById(body.getId()).get();// Salva as informações do banco no objeto (id/email/telefone)
-        u.setTelefone(body.getTelefone()); // Modifica o valor do objeto
+    public ResponseEntity<String> updateUserTel(@RequestBody UpdateUserTelDTO body){
+        boolean existe = false;
+        
+        for(UserModel u : userRepository.findAll())
+            existe = body.getTelefone().equals(u.getTelefone()) ? true : false; 
 
-        userRepository.save(u); // Salva de volta no banco, ja que no objeto ja tem o id ele atualiza aquele id no banco, assim sendo o mesmo comando de criação
+        if(!existe){
+            UserModel update = userRepository.findById(body.getId()).get();// Salva as informações do banco no objeto (id/email/telefone)
 
-        return new ResponseEntity<UpdateUserTelDTO>(body, null, 200);
+            update.setTelefone(body.getTelefone()); // Modifica o valor do objeto    
+
+            userRepository.save(update); // Salva de volta no banco, ja que no objeto ja tem o id ele atualiza aquele id no banco, assim sendo o mesmo comando de criação
+
+            return new ResponseEntity<String>("Atualizado com sucesso..", null, 200);
+        }
+        else return new ResponseEntity<String>("Telefone ja registrado...", null, 409);
     }
 
     // EMAIL ------------------------------------------------------------------
 
     @PostMapping(path="/addE")
-    public ResponseEntity<EmailUserDTO> addNewUserE(@RequestBody EmailUserDTO body){
+    public ResponseEntity<String> addNewUserE(@RequestBody EmailUserDTO body){
         //body.getDataNascimento().setDate(body.getDataNascimento().getDate()+1);
+        boolean existe = false;
 
-        UserModel u = new UserModel();
-        u.setEmail(body.getEmail());
-        u.setDataNascimento(body.getDataNascimento());
-        u.setTipoRecebimentoNotificacao(1); // valor que vai de 0 a 3, 1 - Email
-        u.setTipoRecebimentoSenha(true); // se é true ele recebe por email
+        for(UserModel u : userRepository.findAll())
+           existe = body.getEmail().equals(u.getEmail()) ? true : false;
+        
+        if(!existe){
+            UserModel u = new UserModel();
 
-        userRepository.save(u);
+            u.setEmail(body.getEmail());
+            u.setDataNascimento(body.getDataNascimento());
+            u.setTipoRecebimentoNotificacao(1); // valor que vai de 0 a 3, 1 - Email
+            u.setTipoRecebimentoSenha(true); // se é true ele recebe por email
 
-        return new ResponseEntity<EmailUserDTO>(body, null, 200);
+            userRepository.save(u);    
+
+            return new ResponseEntity<String>("Criado com sucesso...", null, 200);
+        }
+        else return new ResponseEntity<String>("Email ja registrado...", null, 409);
+
     }
 
     @PostMapping(path="/updateE")
-    public ResponseEntity<UpdateUserEmailDTO> updateUserEmail(@RequestBody UpdateUserEmailDTO body){
-        UserModel u = userRepository.findById(body.getId()).get();
+    public ResponseEntity<String> updateUserEmail(@RequestBody UpdateUserEmailDTO body){
+        boolean existe = false;
 
-        u.setEmail(body.getEmail()); 
+        for(UserModel u : userRepository.findAll())
+            existe = body.getEmail().equals(u.getEmail()) ? true : false;
 
-        userRepository.save(u);
+        if(!existe){
+            UserModel u = userRepository.findById(body.getId()).get();
 
-        return new ResponseEntity<UpdateUserEmailDTO>(body, null, 200);
+            u.setEmail(body.getEmail()); 
+
+            userRepository.save(u); 
+
+            return new ResponseEntity<String>("Atualizado com sucesso..", null, 200);
+        }
+        else return new ResponseEntity<String>("Email já registrado", null, 409);
     }
 
     // DELETE USER funciona tanto com telefone quanto email

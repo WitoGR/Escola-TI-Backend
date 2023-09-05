@@ -99,7 +99,7 @@ public class LoginController {
         }
         else{
             response = "muitas tentativas falhas"; // Resposta de 3 tentativas consecutivas erradas (Adicionar envio de email com muitas tentativas erradas) 
-            httpStatus = 423;
+            httpStatus = 429;
         } 
         
         return new ResponseEntity<String>(response, null, httpStatus); // retorna a resposta
